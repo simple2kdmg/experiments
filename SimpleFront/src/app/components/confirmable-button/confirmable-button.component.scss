@@ -1,0 +1,12 @@
+:host {
+    display: inline;
+    white-space: nowrap;
+}
+
+button {
+    height: 26px;
+}
+
+button:not(:first-child) {
+    margin-left: .25em;
+}

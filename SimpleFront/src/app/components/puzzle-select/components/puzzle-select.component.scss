@@ -1,0 +1,128 @@
+.ps-wrapper {
+    display: inline-block;
+    position: relative;
+    font-family: "KaperskySans300", serif;
+    line-height: 1.2em;
+    color: #464646;
+}
+
+.ps-container {
+    display: flex;
+    padding-right: 10px;
+    white-space: nowrap;
+}
+
+.ps-container__puzzle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    height: 33px;
+    padding: 0 12px 0 18px;
+    color: #333333;
+    background-color: #f4f3f3;
+    border-top: 1px solid #b6b6b6;
+    border-bottom: 1px solid #b6b6b6;
+}
+
+.ps-container__puzzle:hover {
+    background-color: #edeaea;
+}
+
+.ps-container__puzzle:hover:after {
+    border-left-color: #edeaea;
+}
+
+.ps-container__puzzle:before {
+    content: "";
+    display: block;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    left: 100%;
+    z-index: 3;
+}
+
+.ps-container__puzzle:after {
+    content: "";
+    display: block;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    left: 100%;
+    z-index: 3;
+}
+
+.ps-container__puzzle:before {
+    border-left: 11px solid #b6b6b6;
+}
+
+.ps-container__puzzle:after {
+    border-left: 10px solid #f4f3f3;
+}
+
+.ps-container__puzzle:first-child {
+    border-left: 1px solid #b6b6b6;
+    border-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ps-container__puzzle:last-child {
+    background-color: #e8122c;
+    color: #ffffff;
+}
+
+.ps-container__puzzle:last-child:hover {
+    background-color: #d81f35;
+}
+
+.ps-container__puzzle:last-child:after {
+    border-left-color: #e8122c;
+}
+
+.ps-container__puzzle:last-child:hover:after {
+    border-left-color: #d81f35;
+}
+
+.ps-dropdown {
+    position: absolute;
+    top: 32px; left: 2px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-width: 140px;
+    overflow: auto;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid #b6b6b6;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+}
+
+.ps-dropdown__section {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    break-inside: avoid;
+}
+
+.ps-dropdown__section > li {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.ps-dropdown__section > li:hover {
+    background-color: #efefef;;
+}
+
+.ps-dropdown__section__header {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 4px 0;
+}

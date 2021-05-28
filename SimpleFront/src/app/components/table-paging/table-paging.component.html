@@ -1,0 +1,26 @@
+<div class="tp__wrapper" *ngIf="pagingInfo">
+    <div class="tp__paging">
+      <div class="tp__paging__text">Page</div> 
+      <mat-icon (click)="onPrevPageClick()">arrow_left</mat-icon>
+      <input type="number"
+              class="tp__paging__page"
+              [(ngModel)]="pagingInfo.page"
+              (focus)="$event.target.select()"
+              (focusout)="onPageChange()"
+              (keydown.enter)="$event.target.blur()">
+      <mat-icon (click)="onNextPageClick()">arrow_right</mat-icon>
+      <div class="tp__paging__text">of {{ pagingInfo.maxPage }}</div>
+    </div>
+    <div class="tp__records-count">
+      Records per Page: 
+      <input type="number"
+              class="tp__paging__max-records"
+              [(ngModel)]="pagingInfo.recordsPerPage"
+              (focus)="$event.target.select()"
+              (focusout)="onRecordsPerPageChange()"
+              (keydown.enter)="$event.target.blur()">
+    </div>
+    <div class="tp__total-count">
+      Total: {{ pagingInfo.recordsCount }}
+    </div>
+</div>

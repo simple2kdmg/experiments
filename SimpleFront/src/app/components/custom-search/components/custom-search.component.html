@@ -1,0 +1,11 @@
+<div class="csr-container">
+    <input #input type="text" class="csr-search" [disabled]="isDisabled">
+    <csr-dropdown *ngIf="dropdownVisible"
+                  [filteredData]="filteredData"
+                  [resultField]="resultField"
+                  [infoFields]="infoFields"
+                  [parentRef]="input"
+                  (clickOutsideEvent)="onClickOutside()"
+                  (itemSelectEvent)="onItemSelect($event)">
+    </csr-dropdown>
+</div>

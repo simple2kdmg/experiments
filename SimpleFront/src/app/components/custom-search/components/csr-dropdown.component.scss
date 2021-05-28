@@ -1,0 +1,25 @@
+.csrd-container {
+    z-index: 199;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0; top: 100%;
+    min-width: 100%;
+    max-height: 250px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #d8d9da;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    overflow-y: auto;
+}
+
+.csrd__item {
+    padding: 0 5px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.csrd__item:hover {
+    background: #eaeced;
+}

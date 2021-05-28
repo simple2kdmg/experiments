@@ -1,0 +1,6 @@
+<ul class="csrd-container">
+    <li *ngFor="let item of filteredData" class="csrd__item" (click)="selectItem(item)">
+        {{ item[resultField] }}
+        <span *ngFor="let info of infoFields"> | {{ item[info] }}</span>
+    </li>
+</ul>

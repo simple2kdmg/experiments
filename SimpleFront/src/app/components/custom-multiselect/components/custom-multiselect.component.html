@@ -1,0 +1,13 @@
+<div #dropdownOpen class="cm-current-selection" [class.disabled]="!data || disabled" (click)="toggleDropdown()">
+    <div class="cm-current-selection__value">{{ text }}</div>
+    <div class="cm-current-selection__reset" (click)="onResetSelection(); $event.stopPropagation();">✖</div>
+</div>
+<cm-dropdown *ngIf="!disabled && dropdownOpened"
+                [hierarchy]="hierarchy"
+                [valueField]="valueField"
+                [idField]="idField"
+                [parentRef]="dropdownOpen"
+                [dropdownOnTop]="dropdownOnTop"
+                (selectedChanges)="onSelectedChanges()"
+                (dropdownCloseEvent)="dropdownOpened = false">
+</cm-dropdown>

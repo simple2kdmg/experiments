@@ -1,0 +1,24 @@
+.csr-container {
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    height: 30px;
+    width: 100%;
+    min-width: 20em;
+    border: 1px solid #d8d9da;
+    border-radius: 2px;
+    padding: 1px;
+}
+
+.csr-search[type=text] {
+    box-sizing: inherit;
+    font-size: 16px;
+    border: none;
+    height: 100%;
+    width: 100%;
+    padding: 0 3px;
+}
+
+.csr-search[type=text]:disabled {
+    background-color: #eaeced;
+}

@@ -1,0 +1,1 @@
+export type KpiChartLabelIconType = 'arrow_up' | 'arrow_down';

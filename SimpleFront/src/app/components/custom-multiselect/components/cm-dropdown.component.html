@@ -1,0 +1,32 @@
+<ul class="cm-dropdown" [ngClass]="dropdownOnTop ? 'top' : 'bottom'">
+    <ng-container *ngTemplateOutlet="tree; context: { currentLevelNodes: hierarchy.nodes, level: 0 }"></ng-container>
+</ul>
+
+<ng-template #tree let-currentLevelNodes="currentLevelNodes" let-level="level">
+    <ng-container *ngFor="let node of currentLevelNodes">
+        <li>
+            <div *ngIf="node?.children"
+                 class="cm-dropdown__toggle"
+                 [style.marginLeft.em]="level"
+                 (click)="toggleNode(node)">
+                 <div *ngIf="node?.children?.length > 0" [style.transform]="node.hidden ? '' : 'rotate(90deg)'">❯</div>
+            </div>
+            <div class="cm-dropdown__custom-checkbox"
+                 [ngSwitch]="node.state"
+                 [class.active]="node.state === nodeState.Checked || node.state === nodeState.Semichecked">
+                <ng-template [ngSwitchCase]="nodeState.Checked"><span class="cm-dropdown__icon">✓</span></ng-template>
+                <ng-template [ngSwitchCase]="nodeState.Semichecked"><span class="cm-dropdown__icon">−</span></ng-template>
+            </div>
+            <input class="cm-dropdown__checkbox"
+                   [style.left.em]="level + 1.5"
+                   [attr.id]="node.data[idField]"
+                   type="checkbox"
+                   (click)="onCheckboxChange(node);false">
+            <label [attr.for]="node.data[idField]" class="cm-dropdown__label">{{ node.data[valueField] }}</label>
+        </li>
+        <ng-container *ngIf="!node.hidden && node?.children?.length > 0"
+                      [ngTemplateOutlet]="tree"
+                      [ngTemplateOutletContext]="{ currentLevelNodes: node.children, level: level + 1 }">
+        </ng-container>
+    </ng-container>
+</ng-template>

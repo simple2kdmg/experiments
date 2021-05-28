@@ -1,0 +1,37 @@
+<ul class="cm-dropdown" [ngClass]="dropdownOnTop ? 'top' : 'bottom'">
+    <li *ngIf="hasFilter && !dropdownOnTop" class="cm-dropdown__filter-bottom">
+        <input  #filterInput
+                class="cm-dropdown__filter"
+                type="text"
+                [value]="hierarchy.filter"
+                (input)="onFilterChange($event.target.value)"
+                placeholder="Search">
+    </li>
+    <ng-container *ngTemplateOutlet="tree; context: { currentLevelNodes: hierarchy.nodes, level: 0 }"></ng-container>
+    <li *ngIf="hasFilter && dropdownOnTop" class="cm-dropdown__filter-top">
+        <input  #filterInput
+                class="cm-dropdown__filter"
+                type="text"
+                [value]="hierarchy.filter"
+                (input)="onFilterChange($event.target.value)"
+                placeholder="Search">
+    </li>
+</ul>
+
+<ng-template #tree let-currentLevelNodes="currentLevelNodes" let-level="level">
+    <ng-container *ngFor="let node of currentLevelNodes">
+        <li class="cm-dropdown__node"
+            [style.paddingLeft.em]="level * 0.8"
+            [style.backgroundColor]="node.selected ? '#d9efed' : ''"
+            [style.fontWeight]="node.selected ? 'bold' : ''"
+            [class.selectable]="node.selectable"
+            (click)="onSelect(node); false"
+            [hidden]="node.hidden">
+            {{ node.data[valueField] }}
+        </li>
+        <ng-container *ngIf="node?.children?.length > 0"
+                      [ngTemplateOutlet]="tree"
+                      [ngTemplateOutletContext]="{ currentLevelNodes: node.children, level: level + 1 }">
+        </ng-container>
+    </ng-container>
+</ng-template>

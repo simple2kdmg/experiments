@@ -1,0 +1,17 @@
+<div #dropdownOpen class="cm-current-selection" [class.disabled]="!data || disabled" (click)="toggleDropdown()">
+    <div class="cm-current-selection__value">{{ text }}</div>
+    <div class="cm-current-selection__reset" (click)="onResetSelection(); $event.stopPropagation();">
+        <svg viewbox="0 0 12 12">
+            <path class="close-x" d="M 2,2 L 10,10 M 10,2 L 2,10" />
+        </svg>
+    </div>
+</div>
+<cs-dropdown *ngIf="dropdownOpened"
+                [hierarchy]="hierarchy"
+                [valueField]="valueField"
+                [parentRef]="dropdownOpen"
+                [dropdownOnTop]="dropdownOnTop"
+                [hasFilter]="hasFilter"
+                (selectedChanges)="onSelectedChanges($event)"
+                (dropdownCloseEvent)="dropdownOpened = false">
+</cs-dropdown>

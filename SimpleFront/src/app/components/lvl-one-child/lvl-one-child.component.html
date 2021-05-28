@@ -1,0 +1,30 @@
+<div class="lvl-one__container">
+    <h3 class="lvl-one__title">
+        lvl-one component
+    </h3>
+
+    <div>{{ someText }}</div>
+
+    <button #button>Test</button>
+
+    <div style="margin: 1em 0;">
+        <input type="text" (input)="onInput($event)" id="input1">
+        <label for="input1">Test input</label>
+    </div>
+    <!-- <button *clickConfirm="onConfirm();secondsForCancel:10">TEST BUTTON</button> -->
+
+    <div style="width: 400px; margin-top: 200px;">
+        <custom-multiselect [data]="multiselectData"
+                            [(ngModel)]="selectedNodes"
+                            (ngModelChange)="onSegmentSelect($event)"
+                            placeholder="All"
+                            valueField="name"
+                            idField="id"
+                            allDataSelectedByDefault="true"
+                            dropdownOnTop="true">
+        </custom-multiselect>
+    </div>
+
+    <!-- debug -->
+    <span style="display: none;">{{ initialize }}</span>
+</div>

@@ -1,0 +1,39 @@
+<div class="pss-wrapper">
+
+    <div #puzzleContainer class="pss-container" *ngIf="selected">
+        <div class="pss-container__puzzle" (click)="switchTo(total)" *ngIf="selected[parentIdField] !== null">
+            {{ total[valueField] | uppercase }}
+        </div>
+        <div class="pss-container__puzzle">
+            {{ selected[valueField] | uppercase }}
+        </div>
+    </div>
+
+    <div #dropdown
+         class="pss-dropdown"
+         [hidden]="!dropdownVisible"
+         [style.width.px]="dropdownWidth"
+         [style.maxWidth.px]="maxDropdownWidth"
+         [style.maxHeight.px]="maxDropdownHeight">
+        <ul #ul class="pss-dropdown__section" *ngFor="let firstLvlNode of tree.nodes">
+            <li class="pss-dropdown__section__header" (click)="switchTo(firstLvlNode.data)">{{ firstLvlNode.name }}</li>
+            <ng-container *ngTemplateOutlet="recursiveList; context: { currentLevelnodes: firstLvlNode.children, level: 0 }"></ng-container>
+        </ul>
+    </div>
+
+    <ng-template #recursiveList let-currentLevelnodes="currentLevelnodes" let-level="level">
+        <ng-container *ngFor="let node of currentLevelnodes">
+            <li [style.paddingLeft.em]="level"
+                [style.fontSize.em]="1 - 0.1 * level"
+                [style.opacity]="1 - 0.1 * level"
+                (click)="switchTo(node.data)">
+                {{ node.name }}
+            </li>
+            <ng-container *ngIf="node.children.length > 0"
+                        [ngTemplateOutlet]="recursiveList"
+                        [ngTemplateOutletContext]="{ currentLevelnodes: node.children, level: level + 1 }">
+            </ng-container>
+        </ng-container>
+    </ng-template>
+
+</div>

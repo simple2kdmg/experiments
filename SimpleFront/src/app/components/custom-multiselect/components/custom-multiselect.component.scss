@@ -1,0 +1,53 @@
+:host {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 240px;
+    height: 32px;
+    padding: 3px;
+    border: 1px solid #d8d9da;
+    border-radius: 2px;
+    color: #757575;
+    background-color: white;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+:host.ng-invalid {
+    background-color: #ff7586;
+}
+
+.cm-current-selection {
+    cursor: default;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border: 1px solid #d8d9da;
+    border-radius: 2px;
+    box-sizing: border-box;
+    background-color: #f1f1f1;
+}
+
+.cm-current-selection:hover {
+    background-color: #e9e9e9;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.cm-current-selection__value {
+    white-space: nowrap;
+    width: 100%;
+    padding: 0 3px;
+    color: #757575;
+}
+
+.cm-current-selection__reset {
+    font-family: SANS-SERIF;
+    color: #757575;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 0 3px;
+}

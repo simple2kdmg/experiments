@@ -1,0 +1,10 @@
+<button *ngIf="!confirmMode" kendoButton (click)="onMainButtonClick()" [disabled]="disabled" [primary]="primary">
+    <span *ngIf="icon" class="k-icon" [ngClass]="icon"></span>
+    {{ text }}
+</button>
+<button *ngIf="confirmMode" kendoButton (click)="onConfirm()" primary="true">
+    {{ confirmText }}
+</button>
+<button *ngIf="confirmMode" kendoButton (click)="onCancel()">
+    {{ cancelText + ' (' + countdown + ')'}}
+</button>
