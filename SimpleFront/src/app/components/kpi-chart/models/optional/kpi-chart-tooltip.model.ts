@@ -93,8 +93,11 @@ export class KpiChartTooltip {
       text += this.chartData.activeGroups.reduce((res, curr) => {
         const value = curr.data[index]?.yValue == null ? '-' :
           KpiChartDatum.formatTooltipYValue(curr.data[index].yValue, this.config, curr.info.useSecondaryYAxis);
+        const color = this.config.xAxisType === 'band' ?
+          datum.color || curr.info.groupColor :
+          curr.info.groupColor || curr.data[0].color;
         return res += `<tr>
-          <td><div style="width: 14px; height: 3px; background-color: ${curr.info.groupColor || curr.data[0].color};"></div></td>
+          <td><div style="width: 14px; height: 3px; background-color: ${color};"></div></td>
           <td style="padding: 0 8px;">${curr.info.groupName}</td>
           <td>${value}</td>
         </tr>`

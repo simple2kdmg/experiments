@@ -8,6 +8,7 @@ export const waterfallChartConfig = new KpiChartConfig({
     xAxisType: 'band',
     yAxisStep: 2,
     yPrimaryAxisType: 'numeric',
+    xTicksOff: true,
     hasTooltips: true
 });
 
@@ -16,7 +17,7 @@ export const waterfallChartGroup = new KpiChartRequestedGroupInfo({
     groupName: 'Waterfall-test',
     groupType: 'waterfall',
     groupOrder: 1,
-    groupColor: 'green',
+    groupColor: 'grey',
     useSecondaryYAxis: false,
     stackedGroupId: null,
     shift: 0,

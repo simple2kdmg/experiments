@@ -60,7 +60,7 @@ export class KpiChartAxis {
     this.formatXTicks(axisBottom);
 
     this.xAxisSelection.call(axisBottom)
-      .call(g => g.select('.domain').remove())
+      .call(g => g.select('.domain').attr('stroke', this.AXIS_COLOR))
       .call(g => g.selectAll('.tick line').attr('stroke', this.AXIS_COLOR))
       .call(g => g.selectAll('.tick text').attr('fill', this.AXIS_TEXT_COLOR)).style('font-size', '14px');
 
