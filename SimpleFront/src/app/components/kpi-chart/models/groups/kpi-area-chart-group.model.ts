@@ -38,7 +38,7 @@ export class KpiAreaChartGroup implements IKpiChartGroup {
     if (!this.notNullData?.length) return;
     this.pointPositions = [];
     const area = d3.area<KpiChartDatum>().x( d => {
-      const x = scales.x(d.xValue);
+      const x = scales.getScaledXValue(d);
       this.pointPositions.push({x, y0: null, y1: null});
       return x;
     });

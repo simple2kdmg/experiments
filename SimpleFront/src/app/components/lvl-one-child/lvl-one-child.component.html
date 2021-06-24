@@ -3,6 +3,12 @@
         lvl-one component
     </h3>
 
+    <div class="kpi-chart-container">
+        <kpi-chart [config]="waterfallChartConfig" [groupInfos]="waterfallChartGroup"></kpi-chart>
+    </div>
+
+    <!-- <div #canvasChart class="canvas-wrapper"></div>
+ -->
     <div>{{ someText }}</div>
 
     <button #button>Test</button>

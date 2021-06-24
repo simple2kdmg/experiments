@@ -3,6 +3,8 @@ import { LvlOneChildDatum } from 'src/app/models/lvl-one-child-datum.model';
 import { MultiselectData, multiselectData, multiselectData2 } from 'src/app/mock-data/multiselect-mock-data.model';
 import { forkJoin, Observable, of, fromEvent } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
+import { ChartEntry } from '../canvas-chart/core/chart-entry.model';
+import { waterfallChartConfig, waterfallChartGroup } from 'src/app/mock-data/kpi-chart-mock-data.model';
 
 class BaseClass {
   id: number = 5;
@@ -24,6 +26,10 @@ class TestClass extends BaseClass {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestroy, AfterViewInit {
+  @Input() set testValue(value: number) {
+    if (!value) console.log('no value!');
+    else console.log('some value');
+  }
   public multiselectData: MultiselectData[] = multiselectData2;
   public selectedNodes: MultiselectData[] = [];
 
@@ -31,6 +37,16 @@ export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestr
   public someText: string = 'Initial text';
 
   private button: HTMLButtonElement;
+
+  private chartEntry: ChartEntry;
+
+  public waterfallChartConfig = waterfallChartConfig;
+  public waterfallChartGroup = [waterfallChartGroup];
+
+  @ViewChild('canvasChart') set chart(value: ElementRef) {
+    if (!value) return;
+    this.chartEntry = new ChartEntry(value.nativeElement);
+  }
 
   @ViewChild('button') set buttonRef(value: ElementRef) {
     if (!value || this.button) return;
@@ -55,6 +71,7 @@ export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestr
   }
 
   ngOnInit(): void {
+    console.log(`Test value: ${this.testValue}`);
   }
 
   ngDoCheck(): void {

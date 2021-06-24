@@ -15,6 +15,6 @@ export class KpiChartMargin {
   }
 
   public adjustLeft(maxYValue: number, config: KpiChartConfig): void {
-    this.left = KpiChartDatum.formatYValue(maxYValue, config).length * 8 + 10;
+    this.left = KpiChartDatum.formatYValue(maxYValue, config).length * 8 + 16;
   }
 }

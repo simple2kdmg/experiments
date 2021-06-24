@@ -52,9 +52,10 @@ export class KpiChartAxis {
   }
 
   private drawAxis(): void {
-    const axisBottom = d3.axisBottom(this.scales.x)
-      .tickSize(-this.dimensions.height)
-      .tickPadding(10);
+    const axisBottom = this.config.xAxisType === 'band' ?
+      d3.axisBottom(this.scales.xBand).tickPadding(10) :
+      d3.axisBottom(this.scales.xNumber || this.scales.xDate).tickPadding(10);
+    axisBottom.tickSize(-this.dimensions.height);
 
     this.formatXTicks(axisBottom);
 
@@ -110,10 +111,10 @@ export class KpiChartAxis {
     const groupedByYear = KpiChartDatum.groupByYear(this.chartData.largestActiveGroup.data);
 
     groupedByYear.forEach(group => {
-      if (group.data.length > 1) labels.push({ text: '|', position: this.scales.x(group.data[0].xDateValue) - halfTickStep });
+      if (group.data.length > 1) labels.push({ text: '|', position: this.scales.xDate(group.data[0].xDateValue) - halfTickStep });
       labels.push({
         text: `${group.year}`,
-        position: group.data.reduce((sum, datum) => sum + this.scales.x(datum.xDateValue) / group.data.length, 0)
+        position: group.data.reduce((sum, datum) => sum + this.scales.xDate(datum.xDateValue) / group.data.length, 0)
       });
     });
 
@@ -122,8 +123,10 @@ export class KpiChartAxis {
     return labels;
   }
 
-  private formatXTicks(axisBottom: d3.Axis<d3.NumberValue | Date>): void {
-    if (this.config.xAxisType === 'date') {
+  private formatXTicks(axisBottom: d3.Axis<d3.NumberValue | Date | string>): void {
+    if (this.config.xAxisType === 'band') {
+      return;
+    } else if (this.config.xAxisType === 'date') {
       axisBottom.ticks(this.chartData.largestActiveGroup.size + 2);
       if (this.config.xAxisStep > 1) {
         axisBottom.tickFormat( (v, i) => i % this.config.xAxisStep === 0 ? '' : d3.timeFormat('%b')(v as Date) );

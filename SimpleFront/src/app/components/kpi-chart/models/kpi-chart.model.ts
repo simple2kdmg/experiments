@@ -48,6 +48,8 @@ export class KpiChart {
 
   public updateChartInfo(requestedGroupInfos: KpiChartRequestedGroupInfo[]): void {
     if (!this.chartData) this.init();
+    // by now, chart supports only one waterfall chart with xAxisType = band
+    if (this.config.xAxisType === 'band' && requestedGroupInfos.length > 1) throw new Error('Band chart allows only 1 Group.');
     // if, for some reason, number of chart during update is changed, we should remove existing
     // charts and series legends, so new charts won't be drawn on top of existing
     if (this.chartData.chartGroups?.length !== requestedGroupInfos.length) this.removeExistingCharts();
@@ -71,7 +73,7 @@ export class KpiChart {
 
   private removeExistingCharts(): void {
     this.mainSelection.selectAll('g').remove();
-    this.legend.removeAllSeries();
+    this.legend?.removeAllSeries();
   }
 
   private drawChart(): void {

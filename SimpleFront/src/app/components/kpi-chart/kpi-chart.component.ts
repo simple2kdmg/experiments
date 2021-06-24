@@ -21,7 +21,7 @@ export class KpiChartComponent implements AfterViewInit, OnDestroy {
     this.config$.next(value);
   }
   @Input() set groupInfos(value: KpiChartRequestedGroupInfo[]) {
-    if (value) this.groupInfos$.next(value);
+    if (value?.length) this.groupInfos$.next(value);
   }
   @Input() set chartBand(value: KpiChartBand) {
     if (value) this.band$.next(value);
@@ -39,14 +39,30 @@ export class KpiChartComponent implements AfterViewInit, OnDestroy {
   private dataSubscription: Subscription;
   private bandSubscription: Subscription;
 
-  constructor(private cdRef: ChangeDetectorRef) { }
+  constructor(private cdRef: ChangeDetectorRef) {
+    this.onWindowClick = this.onWindowClick.bind(this);
+  }
 
   ngAfterViewInit(): void {
+    // if element is hidden, chart won't know width of container, and will be drawn incorrect.
+    // this is temporary workaround to fix this issue.
+    if (this.chartContainer.offsetParent == null) {
+      window.addEventListener('click', this.onWindowClick);
+    } else {
+      this.startProcessing();
+    }
+  }
+
+  private onWindowClick(): void {
+    if (this.chartContainer.offsetParent == null) return;
+    window.removeEventListener('click', this.onWindowClick);
+    this.startProcessing();
+  }
+
+  private startProcessing(): void {
     this.kpiChart = new KpiChart(this.chartContainer);
     this.kpiChart.startListenToResizeEvent();
-
     this.bandSubscription = this.band$.subscribe(band => this.kpiChart.setBand(band));
-
     this.dataSubscription = combineLatest([
       this.config$,
       this.groupInfos$
@@ -58,9 +74,9 @@ export class KpiChartComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.kpiChart.stopListenToResizeEvent();
-    this.bandSubscription.unsubscribe();
-    this.dataSubscription.unsubscribe();
+    this.kpiChart?.stopListenToResizeEvent();
+    this.bandSubscription?.unsubscribe();
+    this.dataSubscription?.unsubscribe();
   }
 
 }

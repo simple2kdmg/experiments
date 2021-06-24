@@ -31,6 +31,7 @@ export class KpiChartGroupInfo extends KpiChartGroupInfoBase {
   brighterGroupColor: string;
   data: KpiChartDatum[];
   notNullData: KpiChartDatum[]; // some charts should skip points with yValue == null.
+  minYValue: number;
   maxYValue: number;
 
   constructor(requestedInfo: KpiChartRequestedGroupInfo, private config: KpiChartConfig) {
@@ -39,21 +40,44 @@ export class KpiChartGroupInfo extends KpiChartGroupInfoBase {
     Object.assign(this, baseProps);
     this.notNullData = [];
     this.data = this.formatRequestedData(data);
+    this.adjustMinAndMaxValues();
     this.brighterGroupColor = this.brighterGroupColor || d3.rgb(this.groupColor).brighter(0.4).formatRgb();
   }
 
   private formatRequestedData(requestedData: KpiChartRequestedDatum[]): KpiChartDatum[] {
     let pointOrder = 0;
+    this.minYValue = requestedData[0]?.yValue;
     this.maxYValue = requestedData[0]?.yValue;
-    return requestedData
-      .sort((d1, d2) => this.config.xAxisType === 'date' ?
-        +d1.xDateValue - +d2.xDateValue :
-        d1.xNumberValue - d2.xNumberValue
-      ).map(reqDatum => {
+    const sortedData = this.sortData(requestedData);
+    return sortedData.map(reqDatum => {
+        this.minYValue = reqDatum.yValue < this.minYValue ? reqDatum.yValue : this.minYValue;
         this.maxYValue = reqDatum.yValue > this.maxYValue ? reqDatum.yValue : this.maxYValue;
         const datum = new KpiChartDatum(reqDatum, this.config.xAxisType, pointOrder++);
         if (datum.yValue != null) this.notNullData.push(datum);
         return datum;
       });
+  }
+
+  private adjustMinAndMaxValues(): void {
+    if (this.groupType !== 'waterfall') return;
+    let cumulativeValue = 0;
+    [this.minYValue, this.maxYValue] = this.data.reduce(([min, max], curr, i) => {
+      const combinedValue = curr.yValue + cumulativeValue;
+      if (combinedValue < min) min = combinedValue;
+      if (combinedValue > max && i < this.data.length - 1) max = combinedValue;
+      cumulativeValue += curr.yValue;
+      return [min, max];
+    }, [0, 0])
+  }
+
+  private sortData(data: KpiChartRequestedDatum[]): KpiChartRequestedDatum[] {
+    switch(this.config.xAxisType) {
+      case 'date':
+        return data.sort((d1, d2) => +d1.xDateValue - +d2.xDateValue);
+      case 'band':
+        return data;
+      default:
+        return data.sort((d1, d2) => d1.xNumberValue - d2.xNumberValue);
+    }
   }
 }

@@ -3,10 +3,10 @@ import { KpiChartGroupInfo } from './kpi-chart-group-info.model';
 import { IKpiChartGroup } from './kpi-chart-group.interface';
 import { KpiAreaChartGroup } from './kpi-area-chart-group.model';
 import { KpiChartConfig } from '../data/kpi-chart-config.model';
-import { KpiChartDatum } from '../data/kpi-chart-datum.model';
 import { KpiBarChartGroup } from './kpi-bar-chart-group.model';
 import { KpiLineChartGroup } from './kpi-line-chart-group.model';
 import { KpiBubbleChartGroup } from './kpi-bubble-chart-group.model';
+import { KpiWaterfallChartGroup } from './kpi-waterfall-chart-group.model';
 
 
 export class KpiChartGroupFactory {
@@ -24,6 +24,8 @@ export class KpiChartGroupFactory {
         return new KpiLineChartGroup(this.container, this.pointReferenceContainer, groupInfo, this.config);
       case 'bubble':
         return new KpiBubbleChartGroup(this.container, this.pointReferenceContainer, groupInfo, this.config);
+      case 'waterfall':
+        return new KpiWaterfallChartGroup(this.container, this.pointReferenceContainer, groupInfo, this.config);
     }
   }
 }

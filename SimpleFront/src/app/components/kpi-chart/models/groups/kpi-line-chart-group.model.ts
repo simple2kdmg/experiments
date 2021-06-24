@@ -42,7 +42,7 @@ export class KpiLineChartGroup implements IKpiChartGroup {
         .attr("stroke-width", 2)
         .attr("d", d3.line<KpiChartDatum>()
           .x((d, i) => {
-            const x = scales.x(d.xValue);
+            const x = scales.getScaledXValue(d);
             this.pointPositions.push({x, y: null});
             return x;
           })

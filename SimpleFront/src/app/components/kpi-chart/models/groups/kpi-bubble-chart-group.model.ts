@@ -45,7 +45,7 @@ export class KpiBubbleChartGroup implements IKpiChartGroup {
         .attr('stroke-width', 2)
         .style('opacity', 0.8)
         .attr('cx', (d, i) => {
-            const x = scales.x(d.xValue);
+            const x = scales.getScaledXValue(d);
             this.pointPositions[i].x = x;
             return x;
         })

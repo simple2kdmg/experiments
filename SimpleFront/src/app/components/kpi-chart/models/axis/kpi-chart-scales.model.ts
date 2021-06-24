@@ -2,14 +2,17 @@ import * as d3 from 'd3';
 import { KpiChartData } from '../data/kpi-chart-data.model';
 import { KpiChartConfig } from '../data/kpi-chart-config.model';
 import { KpiChartDimensions } from '../data/kpi-chart-dimensions.model';
+import { KpiChartDatum } from '../data/kpi-chart-datum.model';
 
 
 export class KpiChartScales {
-  x: d3.ScaleTime<number, number> | d3.ScaleLinear<number, number>;
+  xDate: d3.ScaleTime<number, number>;
+  xNumber: d3.ScaleLinear<number, number>;
+  xBand: d3.ScaleBand<string>;
   yPrimary: d3.ScaleLinear<number, number>;
   ySecondary: d3.ScaleLinear<number, number>;
   z: d3.ScaleLinear<number, number>;
-  xMin: number | Date
+  xMin: number | Date;
   xMax: number | Date;
   yPrimaryMin: number;
   yPrimaryMax: number;
@@ -17,14 +20,24 @@ export class KpiChartScales {
   ySecondaryMax: number;
   zMin: number;
   zMax: number;
+
   private chartData: KpiChartData;
   private cachedXMin: number | Date;
   private cachedXMax: number | Date;
   private cachedYPrimaryMin: number;
   private cachedYPrimaryMax: number;
 
-  constructor(private config: KpiChartConfig, private dimensions: KpiChartDimensions) {
-    
+  constructor(private config: KpiChartConfig, private dimensions: KpiChartDimensions) { }
+
+  public getScaledXValue(datum: KpiChartDatum): number {
+    switch(this.config.xAxisType) {
+      case 'date':
+        return this.xDate(datum.xDateValue);
+      case 'band':
+        return this.xBand(datum.xBandValue);
+      default:
+        return this.xNumber(datum.xNumberValue);
+    }
   }
 
   public appendData(chartData: KpiChartData): void {
@@ -32,10 +45,15 @@ export class KpiChartScales {
   }
 
   public update(): void {
-    if (this.config.xAxisType === 'numeric') {
-      this.setXNumberScale();
-    } else if (this.config.xAxisType === 'date') {
-      this.setXDateScale();
+    switch(this.config.xAxisType) {
+      case 'date':
+        this.setXDateScale();
+        break;
+      case 'band':
+        this.setXBandScale();
+        break;
+      default:
+        this.setXNumberScale();
     }
 
     if (this.config.yPrimaryAxisType == null) {
@@ -66,9 +84,16 @@ export class KpiChartScales {
     this.xMax?.setMonth(this.xMax.getMonth() + 1); // same
     this.cacheXValues();
 
-    this.x = d3.scaleTime()
+    this.xDate = d3.scaleTime()
       .domain([this.xMin, this.xMax])
       .range([0, this.dimensions.width]);
+  }
+
+  private setXBandScale(): void {
+    const bandDomain = this.chartData.primaryActiveGroupsData.map(d => d.xBandValue);
+    this.xBand = d3.scaleBand()
+      .domain(bandDomain)
+      .rangeRound([0, this.dimensions.width]);
   }
 
   private setXNumberScale(): void {
@@ -77,21 +102,26 @@ export class KpiChartScales {
     this.xMax = xMax;
     this.cacheXValues();
 
-    this.x = d3.scaleLinear()
+    this.xNumber = d3.scaleLinear()
       .domain([this.xMin, this.xMax])
       .nice()
       .range([0, this.dimensions.width]);
   }
 
   private setYPrimaryScale(): void {
-    this.yPrimaryMin = this.config.yAxisMinValue ?? d3.min( this.chartData.primaryActiveGroupsData, d => d.yValue );
-    this.yPrimaryMax = d3.max( this.chartData.primaryActiveGroupsData, d => d.y0Value ? d.y0Value + d.yValue : d.yValue );
-
-    if (this.chartData.largestPrimaryActiveGroup.info.groupType !== 'line' && this.yPrimaryMin > 0) {
-      this.yPrimaryMin = 0;
+    if (this.chartData.chartGroups[0].info.groupType === 'waterfall') {
+      this.yPrimaryMin = this.chartData.chartGroups[0].info.minYValue;
+      this.yPrimaryMax = this.chartData.chartGroups[0].info.maxYValue;
+    } else {
+      this.yPrimaryMin = this.config.yAxisMinValue ?? d3.min( this.chartData.primaryActiveGroupsData, d => d.yValue );
+      this.yPrimaryMax = d3.max( this.chartData.primaryActiveGroupsData, d => d.y0Value ? d.y0Value + d.yValue : d.yValue );
+  
+      if (this.chartData.largestPrimaryActiveGroup.info.groupType !== 'line' && this.yPrimaryMin > 0) {
+        this.yPrimaryMin = 0;
+      }
+  
+      this.cacheYPrimaryValues();
     }
-
-    this.cacheYPrimaryValues();
 
     this.yPrimary = d3.scaleLinear()
       .domain([this.yPrimaryMin, this.yPrimaryMax])
