@@ -17,6 +17,7 @@ export class KpiChartRequestedDatum {
   numericLabel: number; // TODO
   labelColor: string;
   labelIcon: KpiChartLabelIconType;
+  isSpecial?: boolean;
 
   constructor(init: Partial<KpiChartRequestedDatum>) {
     Object.assign(this, init);

@@ -54,13 +54,14 @@ export class KpiWaterfallChartGroup implements IKpiChartGroup {
         })
         .attr('y', (d, i) => {
           let y;
-          if (i === 0 || i === this.barPositions.length - 1) {
+          if (d.isSpecial) {
             y = scales.yPrimary(Math.max(0, d.yValue));
+            cumulativeValue = d.yValue;
           } else {
             y = scales.yPrimary(d.yValue + cumulativeValue);
             if (d.yValue < 0) y -= this.barPositions[i].height;
+            cumulativeValue += d.yValue;
           }
-          cumulativeValue += d.yValue;
           this.barPositions[i].y = y;
           return y;
         });

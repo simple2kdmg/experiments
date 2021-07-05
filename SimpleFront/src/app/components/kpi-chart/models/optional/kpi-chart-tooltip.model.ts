@@ -60,7 +60,10 @@ export class KpiChartTooltip {
       rects.attr('order', (d, i) => i)
         .attr('width', (d, i) => areasWidths[i])
         .attr('height', this.dimensions.height )
-        .attr('x', (d, i) => this.scales.getScaledXValue(d) - areasWidths[i] / 2);
+        .attr('x', (d, i) => {
+          const x = this.scales.getScaledXValue(d) - areasWidths[i] / 2;
+          return this.config.xAxisType === 'band' ? x + this.scales.xBand.bandwidth() / 2 : x;
+        });
 
       rects.exit().remove();
     }

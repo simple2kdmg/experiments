@@ -62,12 +62,12 @@ export class KpiChartGroupInfo extends KpiChartGroupInfoBase {
     if (this.groupType !== 'waterfall') return;
     let cumulativeValue = 0;
     [this.minYValue, this.maxYValue] = this.data.reduce(([min, max], curr, i) => {
-      const combinedValue = curr.yValue + cumulativeValue;
+      const combinedValue = curr.isSpecial ? curr.yValue : curr.yValue + cumulativeValue;
       if (combinedValue < min) min = combinedValue;
-      if (combinedValue > max && i < this.data.length - 1) max = combinedValue;
-      cumulativeValue += curr.yValue;
+      if (combinedValue > max) max = combinedValue;
+      if (!curr.isSpecial || i === 0) cumulativeValue += curr.yValue;
       return [min, max];
-    }, [0, 0])
+    }, [0, 0]);
   }
 
   private sortData(data: KpiChartRequestedDatum[]): KpiChartRequestedDatum[] {

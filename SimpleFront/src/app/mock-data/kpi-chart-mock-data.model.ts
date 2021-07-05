@@ -6,7 +6,7 @@ export const waterfallChartConfig = new KpiChartConfig({
     containerWidth: 800,
     containerHeight: 200,
     xAxisType: 'band',
-    yAxisStep: 2,
+    //yAxisStep: 2,
     yPrimaryAxisType: 'numeric',
     xTicksOff: true,
     hasTooltips: true
@@ -24,12 +24,14 @@ export const waterfallChartGroup = new KpiChartRequestedGroupInfo({
     labelType: null,
     labelValueFormat: '',
     data: [
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Start', yValue: 100, color: 'grey' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-2', yValue: 20, color: 'green' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-3', yValue: 60, color: 'green' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-4', yValue: -80, color: 'red' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-5', yValue: 40, color: 'green' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-6', yValue: 60, color: 'green' }),
-        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'End', yValue: 200, color: 'grey' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: '2020', yValue: -100, color: 'grey', isSpecial: true }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-2', yValue: 50, color: 'green' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-3', yValue: 100, color: 'green' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: '2021', yValue: 50, color: 'grey', isSpecial: true }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-5', yValue: 100, color: 'green' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-6', yValue: 50, color: 'green' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-7', yValue: -100, color: 'red' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: 'Band-8', yValue: 150, color: 'green' }),
+        new KpiChartRequestedDatum({ groupId: 1, xBandValue: '2022', yValue: 300, color: 'grey', isSpecial: true }),
     ]
 });
