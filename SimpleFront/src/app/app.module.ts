@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { RootComponent } from './components/root/root.component';
 import { LvlOneChildComponent } from './components/lvl-one-child/lvl-one-child.component';
 import { LvlOneChildContentComponent } from './components/lvl-one-child-content/lvl-one-child-content.component';
+import { KpiToolbarModule } from './components/kpi-toolbar/kpi-toolbar.module';
+import { DataResolverService } from './resolvers/data-resolver.service';
 
 
 @NgModule({
@@ -19,10 +21,12 @@ import { LvlOneChildContentComponent } from './components/lvl-one-child-content/
   imports: [
     SharedModule,
     AppRoutingModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    KpiToolbarModule
   ],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    DataResolverService
   ],
   bootstrap: [AppComponent]
 })

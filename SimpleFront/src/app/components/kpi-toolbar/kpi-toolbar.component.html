@@ -1,0 +1,28 @@
+<div class="toolbar__info-list">
+  <div class="toolbar__icon">
+    <kpi-toolbar-filter-icon [active]="showWholeSelect" (click)="toggleWholeSelect()"></kpi-toolbar-filter-icon>
+  </div>
+
+  <ng-container *ngFor="let elem of toolbarElements">
+    <div #infoContainerRef class="toolbar__info-element" (click)="onElementClick(elem, infoContainerRef)">
+      <div class="toolbar__info-element__title">{{ elem.title }}</div>
+      <ng-container *ngTemplateOutlet="elem.infoRef"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<div class="toolbar__select-list" [style.paddingLeft]="showWholeSelect ? '' : 0">
+  <ng-container *ngFor="let elem of toolbarElements">
+    <div #selectContainerRef class="toolbar__select-element" *ngIf="elem.showSelect" [style.left.px]="elem.paddingLeft">
+      <ng-container *ngTemplateOutlet="elem.selectRef"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="showWholeSelect">
+    <ng-container *ngFor="let elem of toolbarElements">
+      <div class="toolbar__select-element">
+        <ng-container *ngTemplateOutlet="elem.wholeSelectRef"></ng-container>
+      </div>
+    </ng-container>
+  </ng-container> 
+</div>

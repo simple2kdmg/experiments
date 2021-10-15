@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+       "id":1,
+       "fullName":"Miranda Hitch",
+       "age":28,
+       "department":"Finance",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-ohMNgzSA7qFQI56fvEWJqA1WRzkUrGM0ng&usqp=CAU"
+    },
+    {
+       "id":2,
+       "fullName":"Milene Dowson",
+       "age":30,
+       "department":"Finance",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGKNubCvwCjccviDFF1pjVInsmTij5g4e8XQ&usqp=CAU"
+    },
+    {
+       "id":3,
+       "fullName":"Angela Rich",
+       "age":36,
+       "department":"PR",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPOQ628fskn7vKCf_PSPI9-_A4KuphznAypg&usqp=CAU"
+    },
+    {
+       "id":4,
+       "fullName":"Kevin Smith",
+       "age":32,
+       "department":"R&D",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfR-wr9qSvl0q18HMt_LK7fB4Ssh6Acsca2A&usqp=CAU"
+    },
+    {
+       "id":5,
+       "fullName":"Robert Ackons",
+       "age":36,
+       "department":"R&D",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMpnDIpG6DWf9rFBCLX0qAwDfvrcWHo6Zg3A&usqp=CAU"
+    },
+    {
+       "id":6,
+       "fullName":"Shon Lewis",
+       "age":39,
+       "department":"PR",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVpbWkv_APPIx4zQxalPfmEiKzjbmhffRJag&usqp=CAU"
+    },
+    {
+       "id":7,
+       "fullName":"Frank Lerroy",
+       "age":32,
+       "department":"R&D",
+       "imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdk6Gfj_RwEejfCdp17pXduVKfigJgwFB8OQ&usqp=CAU"
+    }
+  ]
+}
+

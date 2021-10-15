@@ -1,0 +1,34 @@
+{
+  "products": [
+    {
+       "id":1,
+       "name":"Kaspersky Endpoint Security",
+       "price":1800
+    },
+    {
+       "id":2,
+       "name":" Kaspersky  antivirus",
+       "price":1100
+    },
+    {
+       "id":3,
+       "name":" Kaspersky  total security",
+       "price":1500
+    },
+    {
+       "id":4,
+       "name":" Kaspersky password manager",
+       "price":400
+    },
+    {
+       "id":5,
+       "name":" Kaspersky internet security",
+       "price":1400
+    },
+    {
+       "id":6,
+       "name":" Kaspersky who calls",
+       "price":500
+    }
+  ]
+}

@@ -3,19 +3,9 @@ import { LvlOneChildDatum } from 'src/app/models/lvl-one-child-datum.model';
 import { MultiselectData, multiselectData, multiselectData2 } from 'src/app/mock-data/multiselect-mock-data.model';
 import { forkJoin, Observable, of, fromEvent } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
+import mockUsers from '../../mock-data/mock-users.json';
+import { MUser } from 'src/app/mock-data/user.model';
 
-class BaseClass {
-  id: number = 5;
-  name: string = 'test';
-}
-
-class TestClass extends BaseClass {
-  newField: string = 'newField';
-  constructor(init?: Partial<TestClass>) {
-    super();
-    Object.assign(this, init);
-  }
-}
 
 @Component({
   selector: 'lvl-one-child',
@@ -26,18 +16,8 @@ class TestClass extends BaseClass {
 export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestroy, AfterViewInit {
   public multiselectData: MultiselectData[] = multiselectData2;
   public selectedNodes: MultiselectData[] = [];
-
-  private counter = 0;
-  public someText: string = 'Initial text';
-
-  private button: HTMLButtonElement;
-
-  @ViewChild('button') set buttonRef(value: ElementRef) {
-    if (!value || this.button) return;
-    this.button = value.nativeElement;
-    fromEvent(this.button, 'click').subscribe(() => console.log('no change detection??'));
-    this.button.addEventListener('click', this.onButtonClick);
-  }
+  public mUsers: MUser[];
+  public templateVisible: boolean;
 
   public get initialize(): boolean {
     console.count('lvl-1-child component redrawn');
@@ -45,9 +25,7 @@ export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestr
   }
 
   constructor(private cdRef: ChangeDetectorRef) {
-    //this.cdRef.detach();
-    console.log(new TestClass());
-    this.onButtonClick = this.onButtonClick.bind(this);
+
   }
 
   ngOnChanges(): void {
@@ -55,6 +33,8 @@ export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestr
   }
 
   ngOnInit(): void {
+    this.mUsers = mockUsers.users;
+    console.log(this.mUsers[0].fullName);
   }
 
   ngDoCheck(): void {
@@ -68,16 +48,12 @@ export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestr
     
   }
 
-  public onButtonClick(): void {
-    this.counter++;
-    this.someText += ' ' + this.counter;
-  }
-
-  public onInput(event): void {
-    console.log(event);
+  public toggleTemplate(): void {
+    this.templateVisible = !this.templateVisible;
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy(): void {
-    this.button.removeEventListener('click', this.onButtonClick);
+
   }
 }

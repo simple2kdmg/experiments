@@ -17,11 +17,10 @@ export class RootComponent implements OnInit, DoCheck, AfterViewInit {
   }
 
   constructor(private cdRef: ChangeDetectorRef) {
-    
   }
 
   ngOnInit(): void {
-
+    
   }
 
   ngDoCheck(): void {

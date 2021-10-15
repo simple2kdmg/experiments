@@ -1,0 +1,48 @@
+$icon-width: 4.2em;
+
+.toolbar__info-list {
+  position: relative;
+  height: 3.5em;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
+
+.toolbar__icon {
+  height: 100%;
+  display: flex;
+  width: $icon-width;
+  justify-content: center;
+}
+
+.toolbar__select-list {
+  position: fixed;
+  display: flex;
+  padding-left: $icon-width;
+  z-index: 901;
+}
+
+.toolbar__info-element,
+.toolbar__select-element {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar__select-element:not(:first-child),
+.toolbar__info-element + .toolbar__info-element {
+  margin-left: 1em;
+}
+
+.toolbar__info-element__title {
+  color: #b9b9b9;
+  font-size: 0.8em;
+  height: 1.3em;
+}
+
+.toolbar__select-element {
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+}

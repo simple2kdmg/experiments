@@ -3,17 +3,7 @@
         lvl-one component
     </h3>
 
-    <div>{{ someText }}</div>
-
-    <button #button>Test</button>
-
-    <div style="margin: 1em 0;">
-        <input type="text" (input)="onInput($event)" id="input1">
-        <label for="input1">Test input</label>
-    </div>
-    <!-- <button *clickConfirm="onConfirm();secondsForCancel:10">TEST BUTTON</button> -->
-
-    <div style="width: 400px; margin-top: 200px;">
+    <!-- <div style="width: 400px; margin-top: 200px;">
         <custom-multiselect [data]="multiselectData"
                             [(ngModel)]="selectedNodes"
                             (ngModelChange)="onSegmentSelect($event)"
@@ -23,8 +13,25 @@
                             allDataSelectedByDefault="true"
                             dropdownOnTop="true">
         </custom-multiselect>
+    </div> -->
+
+    <button (click)="toggleTemplate()">Toggle template</button>
+
+    <div style="height: 600px; border: 1px solid black; padding: 1em; margin-bottom: 1em;">
+        Content block 1
+
+        <div *ngIf="templateVisible">
+            <ng-container *ngTemplateOutlet="templateRef"></ng-container>
+        </div>
+    </div>
+    <div style="height: 900px; border: 1px solid black; padding: 1em;">
+        Content block 2
     </div>
 
     <!-- debug -->
     <span style="display: none;">{{ initialize }}</span>
 </div>
+
+<ng-template #templateRef>
+    <lvl-one-child-content></lvl-one-child-content>
+</ng-template>
