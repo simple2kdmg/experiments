@@ -1,4 +1,4 @@
-import { KpiChartDatum, KpiChartRequestedDatum } from './kpi-chart-datum.model';
+import { KpiChartDatum } from './kpi-chart-datum.model';
 import { KpiChartConfig } from './kpi-chart-config.model';
 import { KpiChartDimensions } from './kpi-chart-dimensions.model';
 import { IKpiChartGroup } from '../groups/kpi-chart-group.interface';

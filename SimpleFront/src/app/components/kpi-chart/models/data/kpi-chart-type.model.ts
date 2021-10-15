@@ -1,1 +1,1 @@
-export type KpiChartType = 'area' | 'column' | 'line' | 'bubble';
+export type KpiChartType = 'area' | 'column' | 'line' | 'bubble' | 'waterfall';

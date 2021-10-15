@@ -9,6 +9,7 @@ export class KpiChartRequestedDatum {
   groupId: number;
   xNumberValue: number;
   xDateValue: Date;
+  xBandValue: string;
   yValue: number;
   zValue: number;
   color: string;
@@ -16,6 +17,7 @@ export class KpiChartRequestedDatum {
   numericLabel: number; // TODO
   labelColor: string;
   labelIcon: KpiChartLabelIconType;
+  isSpecial?: boolean;
 
   constructor(init: Partial<KpiChartRequestedDatum>) {
     Object.assign(this, init);
@@ -23,14 +25,12 @@ export class KpiChartRequestedDatum {
 }
 
 export class KpiChartDatum extends KpiChartRequestedDatum {
-  xValue: number | Date;
   y0Value: number;
   brighterColor: string;
   pointOrder: number;
 
   constructor(init: Partial<KpiChartRequestedDatum>, xAxisType: KpiChartXAxisType, pointOrder: number) {
     super(init);
-    this.xValue = xAxisType === 'date' ? init.xDateValue : init.xNumberValue;
     this.y0Value = null;
     this.color = this.color || '#9bd2cb';
     this.brighterColor = this.brighterColor || d3.rgb(this.color).brighter(0.2).formatRgb();

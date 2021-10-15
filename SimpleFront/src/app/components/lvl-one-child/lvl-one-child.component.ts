@@ -14,6 +14,10 @@ import { MUser } from 'src/app/mock-data/user.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LvlOneChildComponent implements OnChanges, OnInit, DoCheck, OnDestroy, AfterViewInit {
+  @Input() set testValue(value: number) {
+    if (!value) console.log('no value!');
+    else console.log('some value');
+  }
   public multiselectData: MultiselectData[] = multiselectData2;
   public selectedNodes: MultiselectData[] = [];
   public mUsers: MUser[];

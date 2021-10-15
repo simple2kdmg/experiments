@@ -7,11 +7,11 @@ import { KpiChartScales } from '../axis/kpi-chart-scales.model';
 import { appendLabelIcon } from '../optional/kpi-chart-icons.model';
 
 
-export class KpiBarChartGroup implements IKpiChartGroup {
+export class KpiWaterfallChartGroup implements IKpiChartGroup {
   active: boolean;
   get size(): number { return this.info.data.length; }
   get data(): KpiChartDatum[] { return this.info.data; }
-  private barGroup: d3.Selection<d3.BaseType, KpiChartDatum[], SVGGElement, unknown>;
+  private waterfallGroup: d3.Selection<d3.BaseType, KpiChartDatum[], SVGGElement, unknown>;
   private barPositions: Array<{x: number, y: number, height: number}>;
 
   constructor(public container: d3.Selection<SVGGElement, unknown, null, undefined>,
@@ -21,57 +21,47 @@ export class KpiBarChartGroup implements IKpiChartGroup {
     this.active = true;
   }
 
-  public calculateStackedValues(stackedGroup: IKpiChartGroup): void {
-    if (!stackedGroup) return;
-
-    this.data.forEach((d, i) => {
-      if (!stackedGroup.active) {
-        d.y0Value = null;
-        return;
-      }
-
-      if (stackedGroup.data[i] == null) { // corresponding group data is missing
-        d.y0Value = 0;
-        return;
-      }
-      // stacked bar is drawn on top of its "stacked" bar, so they should have same sign
-      if (stackedGroup.data[i].yValue * d.yValue > 0) {
-        d.y0Value = stackedGroup.data[i].yValue;
-      }
-    });
-  }
+  public calculateStackedValues(stackedGroup: IKpiChartGroup): void { }
 
   public draw(scales: KpiChartScales): void {
     if (!this.data?.length) return;
     this.barPositions = [];
-    const yScale = this.info.useSecondaryYAxis ? scales.ySecondary : scales.yPrimary;
+    let cumulativeValue = 0;
 
-    this.barGroup = this.container.selectAll(`g.bar-group-${this.info.groupId}`)
+    this.waterfallGroup = this.container.selectAll(`g.wtfl-group-${this.info.groupId}`)
       .data([this.data])
       .join('g')
-        .attr('class', `bar-group-${this.info.groupId}`)
-        .attr('transform', `translate(${(this.info.shift - 2) * this.config.barWidth / 4}, 0)` );
+        .attr('class', `wtfl-group-${this.info.groupId}`)
+        //.attr('transform', `translate(${this.config.barWidth / 2}, 0)`);
 
-    this.barGroup.selectAll('rect')
-      .data(this.active ? this.data : [])
-      .join('rect') // TODO: check if join is necessary
+    this.waterfallGroup.selectAll('rect')
+      .data(this.data)
+      .join('rect')
         .attr('class', (d, i) => `bar-${i}`)
         .style('fill', d => d.color || this.info.groupColor)
         .attr('stroke', '#383838')
         .attr('stroke-width', 0.5)
-        .attr('width', this.config.barWidth)
+        .attr('width', scales.xBand.bandwidth() / 2)
         .attr('height', d => {
-          const height = Math.abs(yScale(d.yValue) - yScale(0));
+          const height = Math.abs(scales.yPrimary(d.yValue) - scales.yPrimary(0));
           this.barPositions.push({x: null, y: null, height});
           return height;
         })
         .attr('x', (d, i) => {
-          const x = scales.getScaledXValue(d);
+          const x = scales.getScaledXValue(d) + scales.xBand.bandwidth() / 4;
           this.barPositions[i].x = x;
           return x;
         })
         .attr('y', (d, i) => {
-          const y = yScale(Math.max(0, d.y0Value ? d.yValue + d.y0Value : d.yValue));
+          let y;
+          if (d.isSpecial) {
+            y = scales.yPrimary(Math.max(0, d.yValue));
+            cumulativeValue = d.yValue;
+          } else {
+            y = scales.yPrimary(d.yValue + cumulativeValue);
+            if (d.yValue < 0) y -= this.barPositions[i].height;
+            cumulativeValue += d.yValue;
+          }
           this.barPositions[i].y = y;
           return y;
         });
@@ -84,15 +74,15 @@ export class KpiBarChartGroup implements IKpiChartGroup {
   public onMouseOver(index?: number): void {
     if (!this.active || !this.data?.length) return;
     if (index != null) {
-      this.barGroup.select(`rect.bar-${index}`).style('fill', this.data[index]?.brighterColor);
+      this.waterfallGroup.select(`rect.bar-${index}`).style('fill', this.data[index]?.brighterColor);
     } else {
-      this.barGroup.selectAll('rect').data(this.data).style('fill', d => d.brighterColor);
+      this.waterfallGroup.selectAll('rect').data(this.data).style('fill', d => d.brighterColor);
     }
   }
 
   public onMouseOut(): void {
     if (!this.active || !this.data?.length) return;
-    this.barGroup.selectAll('rect').data(this.data).style('fill', d => d.color);
+    this.waterfallGroup.selectAll('rect').data(this.data).style('fill', d => d.color);
   }
 
   private drawLabels(): void {

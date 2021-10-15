@@ -36,8 +36,8 @@ export class KpiChartBand {
 
     if (+x0 === +x1) return;
     
-    let scaledX0 = scales.x(x0);
-    let scaledX1 = scales.x(x1);
+    let scaledX0 = this.scale(x0, scales);
+    let scaledX1 = this.scale(x1, scales);
 
     // need to adjust boundaries according to chart's shift, so they are not outside band
     if (x0 !== xMin) { 
@@ -45,12 +45,12 @@ export class KpiChartBand {
       scaledX0 += shiftLeft < 0 ? shiftLeft : 0;
     }
     if (x1 !== xMax) {
-      const shiftRight = (Math.max(...chartData.chartGroups.map(g => g.info.shift)) - 2) * config.barWidth / 4;
+      const shiftRight = (Math.max(...chartData.chartGroups.map(g => g.info.shift)) + 2) * config.barWidth / 4;
       scaledX1 += shiftRight > 0 ? shiftRight : 0;
     }
 
-    const x = scaledX0 < scales.x(xMin) ? scales.x(xMin) : scaledX0;
-    let width = scaledX1 > scales.x(xMax) ? scales.x(xMax) - x : scaledX1 - x;
+    const x = scaledX0 < this.scale(xMin, scales) ? this.scale(xMin, scales) : scaledX0;
+    let width = scaledX1 > this.scale(xMax, scales) ? this.scale(xMax, scales) - x : scaledX1 - x;
     width = width < 0 ? 0 : width;
 
     bandGroup.selectAll('rect')
@@ -62,5 +62,13 @@ export class KpiChartBand {
         .attr('height', dimensions.height)
         .style('fill', this.color)
         .style('opacity', this.opacity);
+  }
+
+  private scale(value: number | Date, scales: KpiChartScales): number {
+    if (typeof value === "number") {
+      return scales.xNumber(value);
+    } else if (value instanceof Date) {
+      return scales.xDate(value);
+    }
   }
 }

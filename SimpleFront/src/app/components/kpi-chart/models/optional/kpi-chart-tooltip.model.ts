@@ -51,13 +51,19 @@ export class KpiChartTooltip {
         .attr('order', (d, i) => i)
         .attr('width', (d, i) => areasWidths[i])
         .attr('height', this.dimensions.height )
-        .attr('x', (d, i) => this.scales.x(d.xValue) - areasWidths[i] / 2)
+        .attr('x', (d, i) => {
+          const x = this.scales.getScaledXValue(d) - areasWidths[i] / 2;
+          return this.config.xAxisType === 'band' ? x + this.scales.xBand.bandwidth() / 2 : x;
+        })
         .attr('y', 0);
 
       rects.attr('order', (d, i) => i)
         .attr('width', (d, i) => areasWidths[i])
         .attr('height', this.dimensions.height )
-        .attr('x', (d, i) => this.scales.x(d.xValue) - areasWidths[i] / 2);
+        .attr('x', (d, i) => {
+          const x = this.scales.getScaledXValue(d) - areasWidths[i] / 2;
+          return this.config.xAxisType === 'band' ? x + this.scales.xBand.bandwidth() / 2 : x;
+        });
 
       rects.exit().remove();
     }
@@ -69,12 +75,12 @@ export class KpiChartTooltip {
       return this.chartData.largestActiveGroup.data.map((d, i, all) => {
         let width;
         if (i == 0) {
-          width = ( this.scales.x(all[i + 1].xValue) - this.scales.x(d.xValue) );
+          width = ( this.scales.getScaledXValue(all[i + 1]) - this.scales.getScaledXValue(d) );
         } else if (i == all.length - 1) {
-          width = ( this.scales.x(d.xValue) - this.scales.x(all[i - 1].xValue) );
+          width = ( this.scales.getScaledXValue(d) - this.scales.getScaledXValue(all[i - 1]) );
         } else {
-          const toNext = this.scales.x(all[i + 1].xValue) - this.scales.x(d.xValue);
-          const toPrev = this.scales.x(d.xValue) - this.scales.x(all[i - 1].xValue);
+          const toNext = this.scales.getScaledXValue(all[i + 1]) - this.scales.getScaledXValue(d);
+          const toPrev = this.scales.getScaledXValue(d) - this.scales.getScaledXValue(all[i - 1]);
           width = d3.min([toPrev, toNext]);
         }
         return width < 0 ? 0 : width;
@@ -82,15 +88,19 @@ export class KpiChartTooltip {
     }
 
     private updateTooltipText(index: number): void {
-      const xValue = this.chartData.activeGroups[0].data[index].xValue;
+      const datum = this.chartData.activeGroups[0].data[index];
+      const xValue = datum.xDateValue || datum.xNumberValue || datum.xBandValue;
       const groupLabel = this.config.xAxisType === 'date' ? d3.timeFormat("%B, %Y")(xValue as Date) : xValue;
       let text = `<tr><td colspan="3" style="text-align: center; font-weight: bold;">${groupLabel}</td></tr>`;
 
       text += this.chartData.activeGroups.reduce((res, curr) => {
         const value = curr.data[index]?.yValue == null ? '-' :
           KpiChartDatum.formatTooltipYValue(curr.data[index].yValue, this.config, curr.info.useSecondaryYAxis);
+        const color = this.config.xAxisType === 'band' ?
+          datum.color || curr.info.groupColor :
+          curr.info.groupColor || curr.data[0].color;
         return res += `<tr>
-          <td><div style="width: 14px; height: 3px; background-color: ${curr.info.groupColor || curr.data[0].color};"></div></td>
+          <td><div style="width: 14px; height: 3px; background-color: ${color};"></div></td>
           <td style="padding: 0 8px;">${curr.info.groupName}</td>
           <td>${value}</td>
         </tr>`
